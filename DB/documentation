@@ -1,0 +1,8 @@
+string connectionString = "Server=tcp:mhserverstud.database.windows.net,1433;Initial Catalog=DB_IOPROJECT;Persist Security Info=False;User ID=mh308876@student.polsl.pl;Password=3QoXFU6tRou9;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Authentication=Active Directory Password";
+
+
+dotnet add package Microsoft.Data.SqlClient
+dotnet add package package CsvHelper
+
+
+framework .net
