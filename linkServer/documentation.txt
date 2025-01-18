@@ -1,0 +1,4 @@
+linkServer/
+    resources/ 
+        connectDB.ps1 
+    connectDB.cs

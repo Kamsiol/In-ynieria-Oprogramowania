@@ -1,82 +1,83 @@
 using System;
 using System.Data.SqlClient;
 
-public class User
+public class LoginDAO
 {
-    public class DataUser
-    {
-        public int IDuser { get; set; }
-        public string emailUser { get; set; }
-        public int telnumUser { get; set; }
-        public string passwordUser { get; set; }
-        public string nameUser { get; set; }
-        public string surnameUser { get; set; }
-        public string birthdayUser { get; set; }
-        public string sexUser { get; set; }
-    }
-
-    public static List<DataUser> ReadcsvDataUser(string filePath)
-    {
-        var records = new List<DataUser>();
-
-        using (var reader = new StreamReader(filePath))
-        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-        {
-            records = csv.GetRecords<DataUser>().ToList(); 
-        }
-
-        return records;
-    }
-
-    public static void InsertDBDataUser(List<DataUser> data, string connectionString)
-    {
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
-
-            foreach (var record in data)
-            {
-                string query = @"
-                    INSERT INTO DB_IOPROJECT.dbo.userData (IDuser,  emailUser, telnumUser, passwordUser, nameUser, surnameUser, birthdayUser, sexUser)
-                    VALUES (@IDuser,  @emailUser, @telnumUser, @passwordUser, @nameUser, @surnameUser, CONVERT(DATE, @birthdayUser, 104), @sexUser);
-                ";
-
-                using (SqlCommand cmd = new SqlCommand(query, connection))
-                {
-                    cmd.Parameters.AddWithValue("@IDuser", record.IDuser);
-                    cmd.Parameters.AddWithValue("@emailUser", record.emailUser);
-                    cmd.Parameters.AddWithValue("@telnumUser", record.telnumUser);
-                    cmd.Parameters.AddWithValue("@passwordUser", record.passwordUser);
-                    cmd.Parameters.AddWithValue("@nameUser", record.nameUser);
-                    cmd.Parameters.AddWithValue("@surnameUser", record.surnameUser);
-                    cmd.Parameters.AddWithValue("@birthdayUser", record.birthdayUser);
-                    cmd.Parameters.AddWithValue("@sexUser", record.sexUser);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
-    }
-}
-
-public
-class Program
-{
-    public static void Main(string[] args)
+    private string _connectionString;
+    
+    public bool LoginUser(string email, string password)
     {
         try
         {
-            ConnectDB.ConnectToDatabase();
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
 
-            var userData = User.ReadcsvDataUser(@"#dataUser_path#");
-            Console.WriteLine($"Total records in CSV: {userData.Count}");
+                string query = "SELECT COUNT(1) FROM userData WHERE emailUser = @Email AND passwordUser = @Password";
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    cmd.Parameters.AddWithValue("@Password", password);
 
-            User.InsertDBDataUser(userData, ConnectDB.connectionString);
+                    int count = (int)cmd.ExecuteScalar();
 
-            Console.WriteLine("Data has been successfully inserted into the database.");
+                    if (count > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Console.WriteLine($"An error occurred: {ex.Message}");
+            return false;
+        }
+    }
+
+
+    public bool RegisterUser(string email, string name, string surname, string password, string telnum)
+    {
+        try
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string checkQuery = "SELECT COUNT(1) FROM userData WHERE emailUser = @Email OR telnumUser = @Telnum";
+                using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
+                {
+                    checkCommand.Parameters.AddWithValue("@Email", email);
+                    checkCommand.Parameters.AddWithValue("@Telnum", telnum);
+
+                    int existingUser = (int)checkCommand.ExecuteScalar();
+                    if (existingUser > 0)
+                    {
+                        throw new Exception("Email or phone number already exists");
+                    }
+                }
+
+                string insertQuery = "INSERT INTO userData (emailUser, nameUser, surnameUser, passwordUser, telnumUser) " +
+                                     "VALUES (@Email, @Name, @Surname, @Password, @Telnum)";
+                using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
+                {
+                    insertCommand.Parameters.AddWithValue("@Email", email);
+                    insertCommand.Parameters.AddWithValue("@Name", name);
+                    insertCommand.Parameters.AddWithValue("@Surname", surname);
+                    insertCommand.Parameters.AddWithValue("@Password", password);
+                    insertCommand.Parameters.AddWithValue("@Telnum", telnum);
+
+                    insertCommand.ExecuteNonQuery();
+                }
+            }
+            return true; 
+        }
+        catch (Exception)
+        {
+            return false;
         }
     }
 }
