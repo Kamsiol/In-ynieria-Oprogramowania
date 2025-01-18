@@ -1,0 +1,17 @@
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\bin\Debug\net8.0\Rover.Infrastructure.deps.json
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\bin\Debug\net8.0\Rover.Infrastructure.dll
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\bin\Debug\net8.0\Rover.Infrastructure.pdb
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\bin\Debug\net8.0\Rover.Domain.dll
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\bin\Debug\net8.0\Rover.Domain.pdb
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\obj\Debug\net8.0\Rover.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\obj\Debug\net8.0\Rover.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\obj\Debug\net8.0\Rover.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\obj\Debug\net8.0\Rover.Infrastructure.AssemblyInfo.cs
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\obj\Debug\net8.0\Rover.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\obj\Debug\net8.0\Rover.In.F05D346A.Up2Date
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\obj\Debug\net8.0\Rover.Infrastructure.dll
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\obj\Debug\net8.0\refint\Rover.Infrastructure.dll
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\obj\Debug\net8.0\Rover.Infrastructure.pdb
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\obj\Debug\net8.0\ref\Rover.Infrastructure.dll
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\bin\Debug\net8.0\Rover.Infrastructure.runtimeconfig.json
+C:\Users\vikto\source\repos\Dwa Kolka\Rover.Infrastructure\obj\Debug\net8.0\Rover.Infrastructure.genruntimeconfig.cache
