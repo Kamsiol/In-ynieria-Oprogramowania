@@ -231,8 +231,7 @@ def mergeBikeD(df_modelBike, df_bikeData):
     if df_modelBike is not None and df_bikeData is not None:
         df_merged = pd.merge(df_modelBike, df_bikeData, on='IDmodel', how='inner')
         
-        # Вибираємо лише потрібні колонки
-        selected_columns = ['IDbike', 'IDmodel', 'typeModel', 
+        selected_columns = ['IDbike', 'IDmodel', 'typeModel', 'nameModel',
                             'priceModel', 'amountBike', 'amountAvailableBike']
         df_merged = df_merged[selected_columns]
         

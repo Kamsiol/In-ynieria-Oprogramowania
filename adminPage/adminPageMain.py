@@ -4,6 +4,8 @@ from dataAnalysProcess.processDataFUN import preparationUser, maskSensitiveDUser
 from resultPreview.plotCreation import ageBoxplot, agePieChart, userRegion, userSexRegion
 from dataAnalysProcess.processDataFUN import loadUserD, mergeUserD, userAge
 from resultPreview.plotCreation import userPlot
+from dataAnalysProcess.processDataFUN import loadBikeD, mergeBikeD
+from resultPreview.plotCreation import bikePlot, aprioriAnalysis
 
 app = Flask(__name__)
 connection_string = getConnectionString()
@@ -52,20 +54,26 @@ def user_analysis():
     graphs = userPlot(df)
     return render_template('3userAnalysis.html', graphs=graphs)
 
-    
-
-"""
-@app.route('/user_analysis')
-def user_analysis():
-    fig_age = analyze_user_data(dataUser)
-    return render_template('user_analysis.html', fig_age=fig_age.to_html())
 
 @app.route('/bike_analysis')
 def bike_analysis():
-    fig_bike = analyze_bike_data(bikeData, modelBike)
-    return render_template('bike_analysis.html', fig_bike=fig_bike.to_html())
-
+    connection_string = getConnectionString()
+    df_modelBike, df_bikeData = loadBikeD(connection_string)
+    merged = mergeBikeD(df_modelBike, df_bikeData)
+    graphs = bikePlot(merged)
+    
+    return render_template('4bikeAnalysis.html', graphs=graphs)
+    
 """
+@app.route('/predictions')
+def bike_analysis():
+    connection_string = getConnectionString()
+    df_modelBike, df_bikeData = loadBikeD(connection_string)  
+    fig_bike = aprioriAnalysis(df_bikeData, df_modelBike)
+    return render_template('5predictions.html', fig_bike=fig_bike.to_html())
+
 if __name__ == '__main__':
     app.run(debug=True)
+    
+"""
 
