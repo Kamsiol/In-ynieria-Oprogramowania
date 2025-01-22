@@ -1,0 +1,1 @@
+mssql+pyodbc://mh308876@student.polsl.pl:3QoXFU6tRou9@mhserverstud.database.windows.net/DB_IOPROJECT?driver=ODBC+Driver+17+for+SQL+Server&authentication=ActiveDirectoryPassword

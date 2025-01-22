@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analiza danych</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            text-align: left;
+            margin-left: 10%;
+        }
+
+        .row-flex {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .column-half {
+            width: 48%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+
+        .narrow-column {
+            padding-left: 2px;
+            padding-right: 2px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Analiza danych użytkowników</h1>
+
+    <!-- Dane użytkownika & Adres użytkownika -->
+    <div class="row-flex">
+        <div class="column-half">
+            <h3>Dane użytkownika</h3>
+            <table>
+                <tr>
+                    {% for col in rawSamplesUser['userData'][0].keys() %}
+                    <th class="{% if col in ['passwordUser', 'nameUser', 'surnameUser'] %}narrow-column{% endif %}">{{ col }}</th>
+                    {% endfor %}
+                </tr>
+                {% for row in rawSamplesUser['userData'] %}
+                <tr>
+                    {% for value in row.values() %}
+                    <td class="{% if row['nameUser'] == value or row['surnameUser'] == value or row['passwordUser'] == value %}narrow-column{% endif %}">{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="column-half">
+            <h3>Adres użytkownika</h3>
+            <table>
+                <tr>
+                    {% for col in rawSamplesUser['userAdress'][0].keys() %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+                {% for row in rawSamplesUser['userAdress'] %}
+                <tr>
+                    {% for value in row.values() %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- Przykłady danych przetworzonych & Informacje o danych użytkowników -->
+    <div class="row-flex">
+        <div class="column-half">
+            <h3>Przykłady danych przetworzonych</h3>
+            <table>
+                <tr>
+                    {% for col in merged[0].keys() %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+                {% for row in merged %}
+                <tr>
+                    {% for value in row.values() %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="column-half">
+            <h3>Sprawdzenie ogólnych informacji o danych użytkowników</h3>
+            <ul>
+                <li>Dane użytkowników: {{ duplicatesUser['userData'] }} duplikatów</li>
+                <li>Adres użytkowników: {{ duplicatesUser['userAdress'] }} duplikatów</li>
+                <li>Dane użytkowników: {{ infoUser['countUser'] }} zapisów</li>
+                <li>Adresy użytkowników: {{ infoUser['countAdress'] }} zapisów</li>
+                <li>Łączące dane użytkowników: {{ infoUser['countMerged'] }} zapisów</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Dane wyczyszczone & Kroki przetwarzania danych -->
+    <div class="row-flex">
+        <div class="column-half">
+            <h3>Dane wyczyszczone</h3>
+            <table>
+                <tr>
+                    {% for col in processedSamplesUser['cleaned'][0].keys() %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+                {% for row in processedSamplesUser['cleaned'] %}
+                <tr>
+                    {% for value in row.values() %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="column-half">
+            <h3>Kroki przetwarzania danych</h3>
+            <ul>
+                {% for step in processingStepsUser %}
+                <li>{{ step }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <h1>Analiza danych dla rowerów</h1>
+
+    <!-- Dane roweru & Dane modeli -->
+    <div class="row-flex">
+        <div class="column-half">
+            <h3>Dane roweru</h3>
+            <table>
+                <tr>
+                    {% for col in rawSamplesBike['bikeData'][0].keys() %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+                {% for row in rawSamplesBike['bikeData'] %}
+                <tr>
+                    {% for value in row.values() %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="column-half">
+            <h3>Dane modeli</h3>
+            <table>
+                <tr>
+                    {% for col in rawSamplesBike['modelBike'][0].keys() %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+                {% for row in rawSamplesBike['modelBike'] %}
+                <tr>
+                    {% for value in row.values() %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- Przykłady danych przetworzonych & Dane wyczyszczone -->
+    <div class="row-flex">
+        <div class="column-half">
+            <h3>Przykłady danych przetworzonych</h3>
+            <table>
+                <tr>
+                    {% for col in processedSamplesBike['merged'][0].keys() %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+                {% for row in processedSamplesBike['merged'] %}
+                <tr>
+                    {% for value in row.values() %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="column-half">
+            <h3>Dane wyczyszczone</h3>
+            <table>
+                <tr>
+                    {% for col in processedSamplesBike['cleaned'][0].keys() %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+                {% for row in processedSamplesBike['cleaned'] %}
+                <tr>
+                    {% for value in row.values() %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- Sprawdzenie ogólnych informacji o rowerach & Kroki przetwarzania danych -->
+    <div class="row-flex">
+        <div class="column-half">
+            <h3>Sprawdzenie ogólnych informacji o rowerach</h3>
+            <ul>
+                <li>Dane rowerów: {{ duplicatesBike['bikeData'] }} duplikatów</li>
+                <li>Dane o modelach rowerów: {{ duplicatesBike['modelBike'] }} duplikatów</li>
+                <li>Dane rowerów: {{ infoBike['countBike'] }} zapisów</li>
+                <li>Dane o modelach rowerów: {{ infoBike['countModel'] }} zapisów</li>
+                <li>Łączące dane rowerów: {{ infoBike['countMerged'] }} zapisów</li>
+            </ul>
+        </div>
+
+        <div class="column-half">
+            <h3>Kroki przetwarzania danych</h3>
+            <ul>
+                {% for step in processingStepsBike %}
+                <li>{{ step }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Dane rezerwacji & Informacje o rezerwacjach -->
+    <h2 style="text-align: center;">Dane rezerwacji</h2>
+    <table style="width: 100%; text-align: center;">
+        <tr>
+            {% for col in rawSamplesOrder['orderUser'][0].keys() %}
+            <th>{{ col }}</th>
+            {% endfor %}
+        </tr>
+        {% for row in rawSamplesOrder['orderUser'] %}
+        <tr>
+            {% for value in row.values() %}
+            <td>{{ value }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2 style="text-align: center;">Sprawdzenie ogólnych informacji o danych rezerwacji</h2>
+    <ul style="text-align: center;">
+        <li>Dane rezerwacji: {{ duplicatesOrder['orderUser'] }} duplikatów</li>
+        <li>Dane rezerwacji: {{ infoOrder['orderUser'] }} zapisów</li>
+    </ul>
+</body>
+</html>

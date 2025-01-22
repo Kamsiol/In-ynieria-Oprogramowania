@@ -1,0 +1,155 @@
+/* Загальні стилі */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-top: 7px;
+    margin-bottom: 5px;
+}
+
+h2 {
+    font-size: 2em;
+    margin-top: 5px;
+    margin-bottom: 3px;
+}
+
+h3 {
+    font-size: 1.5em;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+/* Стиль для навігаційного меню */
+ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+    margin: 0;
+}
+
+ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1em;
+    padding: 10px 15px;
+    background-color: #d1caca;
+    border-radius: 5px;
+}
+
+ul li a:hover {
+    background-color: #d1caca;
+}
+/*
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+*/
+/* Стилі для таблиць */
+table {
+    margin: 7px 0;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 7px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Стилі для графіків */
+#graphs-container {
+    margin: 20px auto;
+    width: 90%;
+}
+
+#graphs-container div {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* Стилі для списків */
+ul {
+    padding: 20px;
+    margin: 0;
+    list-style-type: square;
+    text-align: left;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+ul li {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+/* Для кращого вигляду мобільних пристроїв */
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    ul {
+        text-align: center;
+    }
+
+    #graphs-container {
+        width: 100%;
+    }
+}

@@ -1,6 +1,3 @@
-dataUser_path = "C:/Users/Mariia/Desktop/University/sem 5/In-ynieria-Oprogramowania/DB/csvDATA/dataUser.csv"
-adressUser_path = "C:/Users/Mariia/Desktop/University/sem 5/In-ynieria-Oprogramowania/DB/csvDATA/adressUser.csv"
-
 code --install-extension ritwickdey.LiveServer
 
 #sqlalchemy
@@ -25,30 +22,85 @@ connection_string = (
         
 
 adminPage
-    CSVdb/ 
+    CSVdb/ (я закінчила цей блок)
         __init__.py
-        connectDBP1.ps1
+        connectDBP1.ps1 вчитання key vault із шляхом до бд
+        extractCSVmain.py - скрипт для запуску цього блоку
         extractCSVfun.py - декларація функцій для зчитування, обробки та запису даних про користувача до бд
-        extractCSVmain.py - скрипт для запуску функцій з попереднього файлу у коректній послідовности
+                завантаження шляху до бд з key vault
+            def runPS1(script_path):
+            def getConnectionString(folder_path, prefix="connection_string"):
+            def deletePS1(folder_path, prefix="connection_string"):
+                функції для з'єданням із бд на сервері азур:
+            def connectDB(connection_string): 
+            def closeConnectionDB(cursor, conn):
+                вчитання даних із CSV файлів
+            def readCSV(file_path):
+                обробка даних до стандартизованого формату, для кожного файлу CSV є додаткові нюанси
+            def processDataUserCSV(data):
+            def processBikeDataCSV(data):
+            def processAdressUserCSV(data):
+            def processSystemDataUserCSV ():
+                вчитання оброблених даних до бд 
+            def DataUser_DB(conn, dataUser):
+            def AdressUser_DB(conn, adressData):
+            def ModelBike_DB(conn, modelBike):
+            def BikeData_DB(conn, bikeData):
+            def OrderUser_DB(conn, orderUser):
 
     dataAnalysProcess/
         __init__.py
         connectDBP.ps1
         DAPmain.py - основиний скрипт для запуску обробки даних
         processDataFUN.py - 
+                завантаження шляху до бд з key vault
+            def runPS1(script_path):
+            def getConnectionString(folder_path, prefix="connection_string"):
+            def deletePS1(folder_path, prefix="connection_string"):
+                усі інші функції
+            def cleanD(df, column_name):
+            def cleanUserD(df):
+            def userAge(df):
+            def ageBoxplot(df): - наразі не використовуємо
+                # Boxplot для віку загалом
+                # Додаємо графік з поясненнями для першого Boxplot
+                # Boxplot для віку за регіонами
+                # Boxplot для віку за статтю
         statisticsFUN.py - декларація функцій для агрегування даних про користувачів
 
     readD/
         __init__.py 
+        extractDmain.py - скрипт для запуску цього блоку
         extractDfun.py 
-        extractDmain.py
+            def connectDB(connection_string):
+            def loadUserD(connection_string):
+            def mergeUserD(df_userData, df_userAdress):
 
     resultPreview/
         __init__.py
         adminPage.html 
         adminpy.txt 
         plotCreation.py - декларування створення графіків 
-        
+        def ageBoxplot(df):
+            # Графік для віку загалом
+            # Boxplot для віку за регіонами
+            # Boxplot для віку за статтю
+        def agePieChart(df):
+        def userRegion(df):
+        def userSexRegion(df):
+        def userPlot(df):
+            ageBoxplot(df)
+            agePieChart(df)
+            userRegion(df)
+            userSexRegion(df)
+
+    templates/
+        1index.html 
+        2dataAnalysis.html 
+        3userAnalysis.html 
+        4userAnalysis.html 
+        5predictions.html
+
 __init__.py
 adminPageMain.py
 
