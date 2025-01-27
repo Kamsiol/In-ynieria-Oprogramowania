@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Rover.Infrastructure;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
-using Cars.API;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
