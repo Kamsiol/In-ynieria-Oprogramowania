@@ -1,21 +1,48 @@
-﻿using FluentValidation.AspNetCore;
+using FluentValidation.AspNetCore;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Rover.Application.UserInfo;
 using Rover.Infrastructure;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
+using Cars.API;
+using Domain;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Rover.API;
+using Rover.Application.BikeInfo;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<DataContext>(opt =>
+// Add services to the container.
+builder.Services.AddControllers(opt =>
 {
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    opt.Filters.Add(new AuthorizeFilter(policy));
 });
 
+// Register MediatR
 builder.Services.AddMediatR(cfg =>
-    cfg.RegisterServicesFromAssemblyContaining<UserList.Handler>());
+    cfg.RegisterServicesFromAssemblyContaining<BikeList>());
 
+// Register DbContext
+builder.Services.AddDbContext<DataContext>(opt =>
+{
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("AzureDb"));
+});
+
+// Register Identity
+builder.Services.AddIdentity<userData, IdentityRole>()
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();
+
+// Scoped logger service
+builder.Services.AddScoped(typeof(IAppLogger<>), typeof(AppLogger<>));
+
+builder.Services.AddScoped<TokenService>();
+
+// Configure CORS
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("CorsPolicy", policy =>
@@ -26,9 +53,10 @@ builder.Services.AddCors(opt =>
     });
 });
 
+// Register FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining<Create>();
 
+// Register Controllers and Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -50,19 +78,21 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Check and apply pending migrations
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 
 try
 {
     var context = services.GetRequiredService<DataContext>();
-    context.Database.Migrate();
-    await Seed.SeedData(context);
+    var userManager = services.GetRequiredService<UserManager<userData>>();
+
+    await context.Database.MigrateAsync();
 }
 catch (Exception ex)
 {
     var logger = services.GetRequiredService<ILogger<Program>>();
-    logger.LogError(ex, "An error occurred during migration or seeding data");
+    logger.LogError(ex, "An error occurred during migration");
 }
 
 app.Run();
