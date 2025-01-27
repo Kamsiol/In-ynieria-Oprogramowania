@@ -1,11 +1,10 @@
-﻿using MediatR;
+using MediatR;
 using Rover.Application;
 using Rover.Domain;
-using Rover.Infrastructure;
 using Rover.Application.BikeInfo;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+
 namespace Rover.API.Controllers
 {
     public class BikesController : BaseApiController
@@ -17,8 +16,9 @@ namespace Rover.API.Controllers
             _mediator = mediator;
         }
 
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<List<Bike>>> GetBikes()
+        public async Task<ActionResult<List<bikeData>>> GetBikes()
         {
             var bikes = await _mediator.Send(new BikeList.Query());
 
@@ -31,9 +31,9 @@ namespace Rover.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBike(Guid id)
+        public async Task<IActionResult> GetBike(int id) // Изменено Guid -> int
         {
-            var result = await _mediator.Send(new BikeInfoOutput.Query { Id = id });
+            var result = await _mediator.Send(new BikeInfoOutput.Query { IDbike = id });
 
             if (!result.IsSuccess)
             {
@@ -44,38 +44,24 @@ namespace Rover.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBike(Bike bike)
+        public async Task<IActionResult> CreateBike(bikeData bike)
         {
-            bike.BikeId = Guid.NewGuid();
-            await _mediator.Send(new BikeCreate.Command { Bike = bike });
-            return CreatedAtAction(nameof(GetBike), new { id = bike.BikeId }, bike);
+            await _mediator.Send(new BikeCreate.Command { bikeData = bike });
+            return CreatedAtAction(nameof(GetBike), new { id = bike.IDbike }, bike);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBike(Guid id)
+        public async Task<IActionResult> DeleteBike(int id)
         {
-            await _mediator.Send(new BikeDelete.Command { BikeId = id });
+            await _mediator.Send(new BikeDelete.Command { IDbike = id });
             return NoContent();
         }
 
-        [HttpGet("search")]
-        public async Task<ActionResult<List<Bike>>> SearchUsers(string? brand = null)
-        {
-            var bikes = await _mediator.Send(new SearchBikes.Query {Brand = brand});
-
-            if (bikes == null || bikes.Count == 0)
-            {
-                return NotFound("No bikes found matching the criteria.");
-            }
-
-            return Ok(bikes);
-        }
-
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditBike(Guid id, Bike bike)
+        public async Task<IActionResult> EditBike(int id, bikeData bike)
         {
-            bike.BikeId = id;
-            await Mediator.Send(new BikeModify.Command { Bike = bike });
+            bike.IDbike = id; // Привязка ID
+            await _mediator.Send(new BikeModify.Command { bikeData = bike }); // Передаем объект Bike
             return Ok();
         }
     }
