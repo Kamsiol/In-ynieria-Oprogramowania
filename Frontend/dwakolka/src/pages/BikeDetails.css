@@ -1,0 +1,133 @@
+/* Общий контейнер */
+.bike-details-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Заголовок */
+  .bike-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Сетка */
+  .bike-details-grid {
+    display: flex;
+    gap: 20px;
+  }
+  
+  /* Изображение */
+  .bike-image-container {
+    flex: 1;
+  }
+  
+  .bike-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Информация о велосипеде */
+  .bike-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .bike-type {
+    font-size: 18px;
+    color: #666;
+  }
+  
+  .bike-price {
+    font-size: 22px;
+    font-weight: bold;
+    color: #007bff;
+    margin-top: 5px;
+  }
+  
+  .bike-availability {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+  
+  .available {
+    color: green;
+  }
+  
+  .not-available {
+    color: red;
+  }
+  
+  .bike-location {
+    font-size: 14px;
+    color: #777;
+    margin-top: 5px;
+  }
+  
+  /* Форма бронирования */
+  .reservation-form {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .form-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .date-input {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+  }
+  
+  .reserve-button {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .reserve-button:hover {
+    background: #0056b3;
+  }
+  
+  /* Сообщения */
+  .success-message {
+    color: green;
+    margin-top: 10px;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+  
+  .loading-message {
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+  }
+  

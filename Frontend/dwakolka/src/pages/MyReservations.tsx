@@ -19,7 +19,7 @@ const MyReservations = () => {
   const userId = "123e4567-e89b-12d3-a456-426614174000"; // Simulated logged-in user ID
 
   useEffect(() => {
-    axios.get(`http://localhost:5008/api/reservations/${userId}`)
+    axios.get(`https://localhost:7057/api/reservations/${userId}`)
       .then((response) => {
         setReservations(response.data);
         setLoading(false);

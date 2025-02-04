@@ -1,35 +1,19 @@
-import React from 'react';
-import './App.css';
-
+import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import AppRouter from "./components/AppRouter";
 
-
 const App = () => {
   return (
     <Router>
-      <Navbar />
-      <div className="p-4">
-        <AppRouter />
+      <div className="flex flex-col min-h-screen bg-gray-100">
+        <Navbar />
+        <main className="container mx-auto p-4 flex-grow">
+          <AppRouter />
+        </main>
       </div>
     </Router>
   );
 };
 
 export default App;
-
-
-
-
-/*
-function App() {
-  return (
-    <div className="App">
-      so wh8t n8w?
-    </div>
-  );
-}
-
-export default App;
-*/

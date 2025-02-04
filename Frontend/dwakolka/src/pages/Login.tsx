@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./Login.css"; // Подключаем CSS
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -13,32 +14,46 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("0");
     try {
-      
-
-      const response = await axios.post("http://localhost:5008/api/Account/login", formData, {
-        headers: { "Content-Type": "application/json" }
+      const response = await axios.post("https://localhost:7057/api/Account/login", formData, {
+        headers: { "Content-Type": "application/json" },
       });
-      const usrid:string  = response.data.toString().split(' ')[3];
-      
 
-      localStorage.setItem("userId", usrid.substring(0, usrid.length-1));
-      navigate("/"); // Redirect to home
+      // Получаем userId напрямую из API
+      const userId: string = response.data.userId;
+      localStorage.setItem("userId", userId);
+
+      navigate("/"); // Перенаправление на главную
     } catch {
       setError("Invalid email or password");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded-lg shadow-md bg-white">
-      <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input name="email" type="email" placeholder="Email" value={formData.email} onChange={handleChange} className="border p-2 w-full mb-3 rounded" required />
-        <input name="password" type="password" placeholder="Password" value={formData.password} onChange={handleChange} className="border p-2 w-full mb-3 rounded" required />
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 w-full rounded hover:bg-blue-600 transition">Login</button>
+    <div className="login-container">
+      <h2 className="login-title">Login</h2>
+      <form onSubmit={handleSubmit} className="login-form">
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          className="input-field"
+          required
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          className="input-field"
+          required
+        />
+        <button type="submit" className="login-button">Login</button>
       </form>
-      {error && <p className="text-red-600 mt-3">{error}</p>}
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 };
