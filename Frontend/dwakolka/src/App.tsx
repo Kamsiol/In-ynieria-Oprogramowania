@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import AppRouter from "./components/AppRouter";
 
 const App = () => {
+  localStorage.setItem("API_URL", "http://localhost:5008/api");
   return (
     <Router>
       <div className="flex flex-col min-h-screen bg-gray-100">

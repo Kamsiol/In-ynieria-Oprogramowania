@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Login.css"; // Подключаем CSS
 
+const API_URL = localStorage.getItem("API_URL");
+
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState<string | null>(null);
@@ -15,7 +17,7 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("https://localhost:7057/api/Account/login", formData, {
+      const response = await axios.post(`${API_URL}/Account/login`, formData, {
         headers: { "Content-Type": "application/json" },
       });
 

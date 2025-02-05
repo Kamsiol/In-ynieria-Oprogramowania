@@ -12,6 +12,8 @@ interface Reservation {
   endDate: string;
 }
 
+const API_URL = localStorage.getItem("API_URL");
+
 const MyReservations = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -19,7 +21,7 @@ const MyReservations = () => {
   const userId = "123e4567-e89b-12d3-a456-426614174000"; // Simulated logged-in user ID
 
   useEffect(() => {
-    axios.get(`https://localhost:7057/api/reservations/${userId}`)
+    axios.get(`${API_URL}/reservations/${userId}`)
       .then((response) => {
         setReservations(response.data);
         setLoading(false);

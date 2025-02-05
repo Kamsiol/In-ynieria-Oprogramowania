@@ -13,6 +13,8 @@ interface Bike {
   availableBike: boolean;
 }
 
+const API_URL = localStorage.getItem("API_URL");
+
 const BikeList = () => {
   const [bikes, setBikes] = useState<Bike[]>([]);
   const [filteredBikes, setFilteredBikes] = useState<Bike[]>([]);
@@ -26,7 +28,7 @@ const BikeList = () => {
 
   useEffect(() => {
     axios
-      .get("https://localhost:7057/api/Bikes")
+      .get(`${API_URL}/Bikes`)
       .then((response) => {
         setBikes(response.data);
         setFilteredBikes(response.data);

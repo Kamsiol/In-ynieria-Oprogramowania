@@ -13,6 +13,8 @@ interface Bike {
   IDreturnLocation?: string;
 }
 
+const API_URL = localStorage.getItem("API_URL");
+
 const BikeDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [bike, setBike] = useState<Bike | null>(null);
@@ -24,7 +26,7 @@ const BikeDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`https://localhost:7057/api/Bikes/${id}`)
+      .get(`${API_URL}/Bikes/${id}`)
       .then((response) => {
         setBike(response.data);
         setLoading(false);
@@ -43,7 +45,7 @@ const BikeDetails = () => {
     if (endDate < startDate) return alert("End date cannot be before start date!");
 
     axios
-      .post("https://localhost:7057/api/Reservation/reserve", {
+      .post(`${API_URL}/Reservation/reserve`, {
         id: userId,
         bikeId: id,
         startTime: startDate,

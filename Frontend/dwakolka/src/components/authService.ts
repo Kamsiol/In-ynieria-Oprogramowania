@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5008/api"; // Replace with your backend URL
-
+//const API_URL = "http://localhost:5008/api"; // Replace with your backend URL
+const API_URL = localStorage.getItem("API_URL");
 
 // User interface matching backend model
 export interface User {

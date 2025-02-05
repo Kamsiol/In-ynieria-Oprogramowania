@@ -14,6 +14,8 @@ const Register = () => {
   });
   const [success, setSuccess] = useState<boolean | null>(null);
 
+  const API_URL = localStorage.getItem("API_URL");
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -21,7 +23,7 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post("https://localhost:7057/api/Account/register", formData, {
+      await axios.post(`${API_URL}/Account/register`, formData, {
         headers: { "Content-Type": "application/json" },
       });
 
