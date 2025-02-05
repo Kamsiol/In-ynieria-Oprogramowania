@@ -22,8 +22,12 @@ const Login = () => {
       });
 
       // Получаем userId напрямую из API
-      const userId: string = response.data.userId;
-      localStorage.setItem("userId", userId);
+      //const userId: string = response.data.userId;
+      //localStorage.setItem("userId", userId);
+      //костыль, но работает
+      //Login request returns a string, instead of a bunch of parameters. need to parse it to use properly:
+      const usrid:string  = response.data.toString().split(' ')[3];
+      localStorage.setItem("userId", usrid.substring(0, usrid.length-1));
 
       navigate("/"); // Перенаправление на главную
     } catch {
