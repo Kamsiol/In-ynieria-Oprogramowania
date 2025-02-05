@@ -107,13 +107,16 @@ const formattedData = validRentalPeriods.map((period) => ({
         startTime: startDate,
         endTime: endDate,
       })
-      .then(() => setReservationSuccess(true))
+      .then(() => {
+        setReservationSuccess(true);
+        setRentalPeriods(prevPeriods => [
+          ...prevPeriods,
+          { startTime: startDate, endTime: endDate }
+        ]);
+      })
       .catch(() => setReservationSuccess(false));
 
-      setRentalPeriods(prevPeriods => [
-        ...prevPeriods,
-        { startTime: startDate, endTime: endDate }
-      ]);
+      
   };
 
   if (loading) return <p className="loading-message">Loading bike details...</p>;
