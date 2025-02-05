@@ -14,8 +14,6 @@ code {
 
 nav ul {
   list-style: none;
-  background-color: gray;
-
   display: flex;
   gap: 16px;
 }
