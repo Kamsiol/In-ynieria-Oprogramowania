@@ -3,6 +3,17 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./BikeDetails.css"; // Подключаем стили
 
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+
+interface RentalPeriod {
+  startTime: string;
+  endTime: string;
+}
+
+
+
+
+
 interface Bike {
   IDbike: number;
   nameModel: string;
@@ -22,20 +33,33 @@ const BikeDetails = () => {
   const [error, setError] = useState<string | null>(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [rentalPeriods, setRentalPeriods] = useState<RentalPeriod[]>([]);
   const [reservationSuccess, setReservationSuccess] = useState<boolean | null>(null);
 
   useEffect(() => {
     axios
       .get(`${API_URL}/Bikes/${id}`)
       .then((response) => {
+        //console.log(response.data);
         setBike(response.data);
+        setRentalPeriods(response.data.rentalPeriods);
         setLoading(false);
       })
       .catch(() => {
         setError("Failed to load bike details.");
+        setRentalPeriods([]);
         setLoading(false);
       });
   }, [id]);
+
+  const validRentalPeriods = rentalPeriods.filter(period => period && period.startTime && period.endTime);
+
+
+// Convert data for visualization
+const formattedData = validRentalPeriods.map((period) => ({
+  name: new Date(period.startTime).toLocaleDateString(),
+  duration: (new Date(period.endTime).getTime() - new Date(period.startTime).getTime()) / (1000 * 60 * 60 * 24),
+}));
 
   const handleReserve = () => {
     const userId = localStorage.getItem("userId");
@@ -58,7 +82,7 @@ const BikeDetails = () => {
   if (loading) return <p className="loading-message">Loading bike details...</p>;
   if (error) return <p className="error-message">{error}</p>;
   if (!bike) return <p className="loading-message">No bike found.</p>;
-
+  console.log(rentalPeriods)
   return (
     <div className="bike-details-container">
       <h2 className="bike-title">{bike.nameModel}</h2>
@@ -96,9 +120,24 @@ const BikeDetails = () => {
               className="date-input"
             />
 
-            <button onClick={handleReserve} className="reserve-button">
+            <button onClick={handleReserve} className="reserve-button" disabled={!bike.availableBike}
+  title={!bike.availableBike ? "This bike is currently unavailable for reservation." : ""}>
               Reserve Now
             </button>
+
+            <h3>Reserved Time Periods</h3>
+            {validRentalPeriods.length === 0 ? (
+  <p>No known reservation periods for this bike.</p>
+) : (
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart data={formattedData}>
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Bar dataKey="duration" fill="#8884d8" />
+      </BarChart>
+    </ResponsiveContainer>
+  )}
 
             {reservationSuccess && <p className="success-message">Bike Reserved Successfully!</p>}
             {reservationSuccess === false && <p className="error-message">Failed to Reserve. Try Again.</p>}
