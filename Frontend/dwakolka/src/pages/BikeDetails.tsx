@@ -59,6 +59,7 @@ const BikeDetails = () => {
 const formattedData = validRentalPeriods.map((period) => ({
   name: new Date(period.startTime).toLocaleDateString(),
   duration: (new Date(period.endTime).getTime() - new Date(period.startTime).getTime()) / (1000 * 60 * 60 * 24),
+  endDate: new Date(period.endTime).toLocaleDateString(),
 }));
 
   const handleReserve = () => {
@@ -67,6 +68,37 @@ const formattedData = validRentalPeriods.map((period) => ({
     if (!userId) return alert("You must be logged in to reserve a bike.");
     if (!startDate || !endDate) return alert("Please select start and end dates.");
     if (endDate < startDate) return alert("End date cannot be before start date!");
+
+    const selectedStart = new Date(startDate);
+    const selectedEnd = new Date(endDate);
+  
+    // Check for overlaps
+    const isOverlapping = rentalPeriods.some(period => {
+      if (!period || !period.startTime || !period.endTime) return false; // Skip invalid entries
+  
+      const periodStart = new Date(period.startTime);
+      const periodEnd = new Date(period.endTime);
+  
+      // Check if the selected period overlaps with any existing rental period
+      return selectedStart < periodEnd && selectedEnd > periodStart;
+    });
+
+    if (isOverlapping) {
+      alert("The selected reservation period overlaps with an existing reservation. Please choose a different time.");
+      return; // Stop the reservation process
+    }
+
+    const daysReserved = Math.ceil((selectedEnd.getTime() - selectedStart.getTime()) / (1000 * 60 * 60 * 24));
+    var totalPrice = 0;
+    if (bike != null){
+      totalPrice = daysReserved * bike.priceModel;}
+    
+    const confirmReservation = window.confirm(
+      `The total price for this reservation is $${totalPrice}. Do you want to proceed?`
+    );
+  
+    if (!confirmReservation) return; // Stop reservation if user cancels
+  
 
     axios
       .post(`${API_URL}/Reservation/reserve`, {
@@ -77,6 +109,11 @@ const formattedData = validRentalPeriods.map((period) => ({
       })
       .then(() => setReservationSuccess(true))
       .catch(() => setReservationSuccess(false));
+
+      setRentalPeriods(prevPeriods => [
+        ...prevPeriods,
+        { startTime: startDate, endTime: endDate }
+      ]);
   };
 
   if (loading) return <p className="loading-message">Loading bike details...</p>;
@@ -133,7 +170,21 @@ const formattedData = validRentalPeriods.map((period) => ({
       <BarChart data={formattedData}>
         <XAxis dataKey="name" />
         <YAxis />
-        <Tooltip />
+        <Tooltip 
+      content={({ payload }) => {
+        if (payload && payload.length) {
+          const { name, duration, endDate } = payload[0].payload;
+          return (
+            <div className="custom-tooltip">
+              <p><strong>Start Date:</strong> {name}</p>
+              <p><strong>Duration:</strong> {duration} days</p>
+              <p><strong>End Date:</strong> {endDate}</p>
+            </div>
+          );
+        }
+        return null;
+      }}
+    />
         <Bar dataKey="duration" fill="#8884d8" />
       </BarChart>
     </ResponsiveContainer>

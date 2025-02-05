@@ -137,3 +137,17 @@
     font-size: 16px;
   }
   
+  /*chart*/
+
+  .custom-tooltip {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .custom-tooltip p {
+    margin: 5px 0;
+  }
+  
