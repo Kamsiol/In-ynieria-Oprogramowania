@@ -1,9 +1,13 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import AppRouter from "./components/AppRouter";
 
+
+
 const App = () => {
+  
   localStorage.setItem("API_URL", "http://localhost:5008/api");
   return (
     <Router>

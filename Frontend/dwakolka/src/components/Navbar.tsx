@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+
 
 export default function Navbar() {
   const [hovered, setHovered] = useState<string | null>(null);
   const navigate = useNavigate();
+ // const user= localStorage.getItem()
+ const [userId, setUserId] = useState<string | null>(null);
+ useEffect(() => {
+  const storedUserId = localStorage.getItem("userId");
+  if (storedUserId) {
+    setUserId(storedUserId);
+  }
+}, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId")
+    setUserId(null);
     navigate("/");
   };
 
@@ -27,6 +39,10 @@ export default function Navbar() {
             Bike List
           </Link>
         </li>
+
+        
+ {!userId && (
+          <>
         <li style={styles.navItem}>
           <Link
             to="/login"
@@ -53,6 +69,24 @@ export default function Navbar() {
             Register
           </Link>
         </li>
+        </>
+        )}
+        {userId && (
+          <li style={styles.navItem}>
+            <button
+              onClick={handleLogout}
+              style={{
+                ...styles.link,
+                backgroundColor: "#dc3545", // Red color for logout
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Logout
+            </button>
+          </li>
+        )}
+        
       </ul>
     </nav>
   );

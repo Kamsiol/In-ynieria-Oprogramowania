@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Value } from "react-calendar/dist/cjs/shared/types";
 import axios from "axios";
-import "./BikeDetails.css"; // Подключаем стили
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import "./BikeDetails.css";
 
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { time } from "console";
 
 interface RentalPeriod {
   startTime: string;
@@ -54,6 +58,39 @@ const BikeDetails = () => {
 
   const validRentalPeriods = rentalPeriods.filter(period => period && period.startTime && period.endTime);
 
+  const isDateBooked = (date: Date) => {
+    if (!bike?.availableBike) return true;
+    return validRentalPeriods.some((period) => {
+      const periodStart = new Date(period.startTime);
+      const periodEnd = new Date(period.endTime);
+      return date >= periodStart && date <= periodEnd;
+    });
+  };
+/*
+  const handleCalendarChange = (value: Date | Date[] | null) => {
+    if (Array.isArray(value)) {
+      const [start, end] = value;
+      setStartDate(start.toISOString().split("T")[0]);
+      setEndDate(end.toISOString().split("T")[0]);
+    }
+  };*/
+
+  const handleCalendarChange = (value: Value) => {
+    if (Array.isArray(value)) {
+      const [start, end] = value;
+      if(start != null && end != null){
+      setStartDate(start.toISOString().split("T")[0]);
+      setEndDate(end.toISOString().split("T")[0]);}
+    } else if (value instanceof Date) {
+      setStartDate(value.toISOString().split("T")[0]);
+      setEndDate(value.toISOString().split("T")[0]);
+    } else {
+      // Handle null case if needed
+      setStartDate("");
+      setEndDate("");
+    }
+  };
+
 
 // Convert data for visualization
 const formattedData = validRentalPeriods.map((period) => ({
@@ -68,6 +105,8 @@ const formattedData = validRentalPeriods.map((period) => ({
     if (!userId) return alert("You must be logged in to reserve a bike.");
     if (!startDate || !endDate) return alert("Please select start and end dates.");
     if (endDate < startDate) return alert("End date cannot be before start date!");
+    const today = new Date().toISOString().split("T")[0];
+    if (startDate < today) return alert("Start date cannot be before today!");
 
     const selectedStart = new Date(startDate);
     const selectedEnd = new Date(endDate);
@@ -122,7 +161,7 @@ const formattedData = validRentalPeriods.map((period) => ({
   if (loading) return <p className="loading-message">Loading bike details...</p>;
   if (error) return <p className="error-message">{error}</p>;
   if (!bike) return <p className="loading-message">No bike found.</p>;
-  console.log(rentalPeriods)
+ // console.log(rentalPeriods)
   return (
     <div className="bike-details-container">
       <h2 className="bike-title">{bike.nameModel}</h2>
@@ -140,7 +179,7 @@ const formattedData = validRentalPeriods.map((period) => ({
           </p>
           <p className="bike-location">Return Location: {bike.IDreturnLocation || "Unknown"}</p>
 
-          {/* Форма бронирования */}
+          {/**/}
           <div className="reservation-form">
             <h3 className="form-title">Reserve this Bike</h3>
 
@@ -161,13 +200,36 @@ const formattedData = validRentalPeriods.map((period) => ({
             />
 
             <button onClick={handleReserve} className="reserve-button" disabled={!bike.availableBike}
-  title={!bike.availableBike ? "This bike is currently unavailable for reservation." : ""}>
+              title={!bike.availableBike ? "This bike is currently unavailable for reservation." : ""}>
               Reserve Now
             </button>
 
             <h3>Reserved Time Periods</h3>
-            {validRentalPeriods.length === 0 ? (
+            
+
+            {reservationSuccess && <p className="success-message">Bike Reserved Successfully!</p>}
+            {reservationSuccess === false && <p className="error-message">Failed to Reserve. Try Again.</p>}
+          </div>
+          <div>
+          <Calendar
+              minDate={new Date()}
+              selectRange={true}
+              onChange={handleCalendarChange}
+              tileClassName={({ date, view }) => {
+                if (view !== "month") return null;
+                return isDateBooked(date) ? "unavailable" : "available";
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+/*{validRentalPeriods.length === 0 ? (
   <p>No known reservation periods for this bike.</p>
+
+  
 ) : (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart data={formattedData}>
@@ -191,15 +253,5 @@ const formattedData = validRentalPeriods.map((period) => ({
         <Bar dataKey="duration" fill="#8884d8" />
       </BarChart>
     </ResponsiveContainer>
-  )}
-
-            {reservationSuccess && <p className="success-message">Bike Reserved Successfully!</p>}
-            {reservationSuccess === false && <p className="error-message">Failed to Reserve. Try Again.</p>}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
+  )}*/
 export default BikeDetails;
